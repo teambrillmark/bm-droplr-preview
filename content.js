@@ -1,43 +1,32 @@
-const iframeMap = new Map();
+const windowMap = new Map();
 
 function handleMouseOver(event) {
     const target = event.target;
 
     if (target.tagName === 'A' && target.href.startsWith('https://d.pr/i/')) {
+        // Close all previously opened windows
+        windowMap.forEach((openedWindow, url) => {
+            if (!openedWindow.closed) {
+                openedWindow.close();
+            }
+        });
+
+        // Clear the map after closing the windows
+        windowMap.clear();
+
         const url = target.href;
-        const iframeId = 'iframe_' + url.replace(/[^\w]/g, '_');
+        const windowName = 'window_' + url.replace(/[^\w]/g, '_');
 
-        if (!iframeMap.has(url)) {
-            const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.id = iframeId;
-            iframe.style.width = '700px'; // Set your desired width
-            iframe.style.height = '500px'; // Set your desired height
-            iframe.style.position = 'fixed';
-            iframe.style.bottom = '20px'; // Distance from bottom
-            iframe.style.right = '20px'; // Distance from right
+        // Calculate the position for the window to appear at the bottom right
+        const width = 100;
+        const height = 500;
+        const left = window.screen.width - width;
+        const top = window.screen.height - height;
 
-            document.body.appendChild(iframe);
-            iframeMap.set(url, iframe);
-        } else {
-            const existingIframe = iframeMap.get(url);
-            existingIframe.style.display = 'block';
-        }
-    }
-}
-
-function handleMouseOut(event) {
-    const target = event.target;
-
-    if (target.tagName === 'A' && target.href.startsWith('https://d.pr/i/')) {
-        const url = target.href;
-        if (iframeMap.has(url)) {
-            const iframe = iframeMap.get(url);
-            iframe.style.display = 'none';
-        }
+        // Open a new window at the calculated position
+        const newWindow = window.open(url, windowName, `width=${width},height=${height},left=${left},top=${top}`);
+        windowMap.set(url, newWindow);
     }
 }
 
 document.body.addEventListener('mouseover', handleMouseOver);
-document.body.addEventListener('mouseout', handleMouseOut);
-
