@@ -18,7 +18,7 @@ function handleMouseOver(event) {
         const windowName = 'window_' + url.replace(/[^\w]/g, '_');
 
         // Calculate the position for the window to appear at the bottom right
-        const width = 100;
+        const width = 1000;
         const height = 500;
         const left = window.screen.width - width;
         const top = window.screen.height - height;
