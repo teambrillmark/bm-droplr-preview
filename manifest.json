@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "d.pr Iframe Loader",
+  "version": "1.0",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
